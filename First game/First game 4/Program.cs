@@ -4,32 +4,31 @@ Random rng = new Random();
 int TankDistance = rng.Next(39, 71);
 string BattlefieldStation = "_/";
 string Battlefield = "________________________________________________________________________________";
-bool TargetDestroyed = false;
 
 Console.WriteLine("Enter your username: ");
 string UserName = Console.ReadLine();
 
 while(TankDistance > 0){
     Console.Clear();
-    Console.WriteLine("Heres a map of the current situation:");
     string currentBattlefield = Battlefield.Remove(TankDistance, 1).Insert(TankDistance, "T");
-    Console.WriteLine(BattlefieldStation + currentBattlefield);
-    Console.WriteLine("Ready your shot, " + UserName + ".");
-    int PlayerDistance = Convert.ToInt32(Console.ReadLine());
+    Console.WriteLine("Heres a map of the current situation:\n" + BattlefieldStation + currentBattlefield);
+    Console.WriteLine("Ready your shot, " + UserName + "! 1 is the closest you can go and");
+    int PlayerDistance = Convert.ToInt32(Console.ReadLine()) - 1;
 
     if(PlayerDistance < TankDistance || PlayerDistance > TankDistance){
+        string DynamicReply = (PlayerDistance < TankDistance) ? "Bit too short!" : "Bit too far!";
+
         TankDistance = MoveTank(TankDistance);
         string PlayerDestination = currentBattlefield.Remove(PlayerDistance, 1).Insert(PlayerDistance, "*");
         Console.WriteLine(BattlefieldStation + PlayerDestination);
 
-        string DynamicReply = (PlayerDistance < TankDistance) ? "Bit too short!" : "Bit too far!";
         Console.WriteLine(DynamicReply + "\nPress to continue");
         Console.ReadKey();
     }
 
     else if(PlayerDistance == TankDistance){
         string PlayerDestination = currentBattlefield.Remove(TankDistance, 1).Insert(TankDistance, "*");
-        Console.WriteLine(BattlefieldStation + PlayerDestination + "\n Bullseye!");
+        Console.WriteLine(BattlefieldStation + PlayerDestination + "\nBullseye!\nPress to continue");
         Console.ReadKey();
         break;
     }
