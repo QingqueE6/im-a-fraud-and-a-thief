@@ -12,7 +12,7 @@ while(TankDistance > 0){
     Console.Clear();
     string currentBattlefield = Battlefield.Remove(TankDistance, 1).Insert(TankDistance, "T");
     Console.WriteLine("Heres a map of the current situation:\n" + BattlefieldStation + currentBattlefield);
-    Console.WriteLine("Ready your shot, " + UserName + "! 1 is the closest you can go and");
+    Console.WriteLine("Ready your shot, " + UserName + "! 1 is the closest you can go and 80 is the maximum range.");
     int PlayerDistance = Convert.ToInt32(Console.ReadLine()) - 1;
 
     if(PlayerDistance < TankDistance || PlayerDistance > TankDistance){
