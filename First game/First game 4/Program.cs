@@ -4,6 +4,7 @@ Random rng = new Random();
 int TankDistance = rng.Next(39, 71);
 string BattlefieldStation = "_/";
 string Battlefield = "________________________________________________________________________________";
+bool TargetDestroyed = false;
 
 Console.WriteLine("Enter your username: ");
 string UserName = Console.ReadLine();
@@ -22,26 +23,33 @@ while(TankDistance > 0){
         Console.WriteLine(BattlefieldStation + PlayerDestination);
 
         string DynamicReply = (PlayerDistance < TankDistance) ? "Bit too short!" : "Bit too far!";
-        Console.WriteLine(DynamicReply);
-        Console.WriteLine("Press to continue");
+        Console.WriteLine(DynamicReply + "\nPress to continue");
         Console.ReadKey();
     }
 
     else if(PlayerDistance == TankDistance){
         string PlayerDestination = currentBattlefield.Remove(TankDistance, 1).Insert(TankDistance, "*");
-        Console.WriteLine(BattlefieldStation + PlayerDestination);
-        Console.WriteLine("Bullseye!");   
+        Console.WriteLine(BattlefieldStation + PlayerDestination + "\n Bullseye!");
+        Console.ReadKey();
+        break;
     }
 }
 
-if (TankDistance <= 0)
-{
-    GameOver();
-}
+Action resultAction = (TankDistance <= 0) 
+    ? new Action(GameOverScreen) 
+    : new Action(VictoryScreen);
+
+resultAction();
 
 // Functions
-static void GameOver(){
-        Console.WriteLine("======================================================================\nYou absolute waste of air and energy, you screwed it.\nNow the tank is rolling in, killing the poor folk of your hometown.\nI hope you rot in hell, you disgusting pig.\nI despise you.\nI hate you.\n======================================================================");  
+static void GameOverScreen(){
+    Console.Clear();
+    Console.WriteLine("======================================================================\nYou absolute waste of air and energy, you screwed it.\nNow the tank is rolling in, killing the poor folk of your hometown.\nI hope you rot in hell, you disgusting pig.\nI despise you.\nI hate you.\n======================================================================");  
+}
+
+static void VictoryScreen(){
+    Console.Clear();
+    Console.WriteLine("======================================================================\nYou bested the approaching tank, you felled the enemy.\nPeople are cheering, your comrades finally feel at ease.\nBut at what cost? Your so-called enemy had hopes and dreams too.\nAre you happy with your choices?\n======================================================================");  
 }
 
 static int MoveTank(int TankDistance){
