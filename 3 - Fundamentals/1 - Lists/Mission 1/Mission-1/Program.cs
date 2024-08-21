@@ -6,7 +6,7 @@ namespace Mission1
     class MainClass
     {
 
-        static int ProcessStringList()
+        static int CreateAbilityScore()
         {
             Random Rng = new Random();
             int Random1 = Rng.Next(1,7);
@@ -21,12 +21,12 @@ namespace Mission1
         }
         public static void Main(string[] args)
         {
-            int AbilityScore1 = ProcessStringList();
-            int AbilityScore2 = ProcessStringList();
-            int AbilityScore3 = ProcessStringList();
-            int AbilityScore4 = ProcessStringList();
-            int AbilityScore5 = ProcessStringList();
-            int AbilityScore6 = ProcessStringList();
+            int AbilityScore1 = CreateAbilityScore();
+            int AbilityScore2 = CreateAbilityScore();
+            int AbilityScore3 = CreateAbilityScore();
+            int AbilityScore4 = CreateAbilityScore();
+            int AbilityScore5 = CreateAbilityScore();
+            int AbilityScore6 = CreateAbilityScore();
         }
     }
 }
