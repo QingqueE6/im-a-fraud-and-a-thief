@@ -7,60 +7,74 @@ namespace Mission1
     {
         public static void Main(string[] args)
         {
-            List<string> characterNames = new List<string> {
+            List<string> CharacterNames = new List<string> {
                 "Jonathan Joestar",
                 "Johnny Bravo",
                 "John Romero",
                 "John Carmack"
             };
 
-            characterNames = SimulateCombat(characterNames, "Orc", 15, 10); // Orc Encounter
-            characterNames =  SimulateCombat(characterNames, "Azer", 39, 18); // Azer Encounter
-            characterNames =  SimulateCombat(characterNames, "Troll", 84, 16); // Troll Encounter
+            CharacterNames = SimulateCombat(CharacterNames, "Orc", 2, 8, 6, 10); // Orc Encounter
+            CharacterNames = SimulateCombat(CharacterNames, "Azer", 6, 8, 12, 18); // Azer Encounter
+            CharacterNames = SimulateCombat(CharacterNames, "Troll", 8, 10, 40, 16); // Troll Encounter
 
-            if (characterNames.Count != 0)
+            if (CharacterNames.Count != 0)
             {
-                Survivors(characterNames);
+                Survivors(CharacterNames);
             }
 
         }
 
-        static List<string> SimulateCombat(List<string> characterNames, string monsterName, int monsterHP, int savingThrowDC)
+        static List<string> SimulateCombat(List<string> CharacterNames, string MonsterName, int MonsterAmountDice, int MonsterValueDice, int MonsterBonus, int savingThrowDC)
         {
-            var Rng = new Random();
+            int MonsterHp = DiceRoll(MonsterAmountDice, MonsterValueDice, MonsterBonus);
 
-            while (monsterHP > 0 && characterNames.Count > 0)
+            while (MonsterHp > 0 && CharacterNames.Count > 0)
             {
-                for (int i = 0; i < characterNames.Count; i++)
+                for (int i = 0; i < CharacterNames.Count; i++)
                 {
-                    int CurrentAttack = WeaponAttack(5, 100);
-                    // Ternary if-else, if HP goes below 0, turn it to 0. Else just keep attacking
-                    monsterHP = (monsterHP - CurrentAttack < 0) ? 0 : monsterHP - CurrentAttack;
+                    int CurrentAttack = DiceRoll(2, 12); // I made it 2d12 to make sure I reach the final ending
+                    // If HP goes below 0, turn it to 0. Else just keep attacking
+                    MonsterHp = (MonsterHp - CurrentAttack < 0) ? 0 : MonsterHp - CurrentAttack;
 
-                    Console.WriteLine($"{ characterNames[i] } hits for {CurrentAttack} Damage! The Foe has {monsterHP} Healthpoints left.");
+                    Console.WriteLine($"{ CharacterNames[i] } hits for {CurrentAttack} Damage! The Foe has {MonsterHp} Healthpoints left.");
 
-                    if (monsterHP == 0)
+                    if (MonsterHp == 0)
                     {
                         Console.WriteLine("Thy foe has been vanquished.");
                         break;
                     }
                 }
-                if (monsterHP > 0)
+                if (MonsterHp > 0)
                 {
-                    SavingThrow(characterNames, savingThrowDC, monsterName);
+                    SavingThrow(CharacterNames, savingThrowDC, MonsterName);
                 }
             }
 
-            if (characterNames.Count == 0)
+            if (CharacterNames.Count == 0)
             {
                 GameOverScreen();
-                return characterNames;
+                return CharacterNames;
             }
             else
             {
                 VictoryScreen();
-                return characterNames;
+                return CharacterNames;
             }
+        }
+
+        // ====================== smaller methods ======================
+
+        static int DiceRoll(int AmountDice, int ValueDice, int FixedBonus = 0)
+        {
+            var Rng = new Random();
+            int TotalDice = FixedBonus;
+
+            for (int i = 0; i < AmountDice; i++)
+            {
+                TotalDice += Rng.Next(1, ValueDice + 1);
+            }
+            return TotalDice;
         }
 
         static List<string> SavingThrow(List<string> activeParty, int DcCheck, string monsterName)
@@ -71,7 +85,8 @@ namespace Mission1
             }
             var Rng = new Random();
             int DcModifier = 3;
-            int Save = Rng.Next(1, 21) + DcModifier;
+            int Save = DiceRoll(1, 20, DcModifier);
+
             int UpperLimit = activeParty.Count;
             int EnemyTarget = (UpperLimit == 1) ? 0 : Rng.Next(0, UpperLimit);
             Console.WriteLine($"The {monsterName} prepares its attack on {activeParty[EnemyTarget]}... {activeParty[EnemyTarget]} rolled a {Save}.");
@@ -88,17 +103,7 @@ namespace Mission1
             return activeParty;
         }
 
-        static int WeaponAttack(int AmountDice, int ValueDice)
-        {
-            var Rng = new Random();
-            int TotalDmg = 0;
-
-            for (int i = 0; i < AmountDice; i++)
-            {
-                TotalDmg += Rng.Next(1, ValueDice + 1);
-            }
-            return TotalDmg;
-        }
+        // ====================== resultscreens ======================
 
         static void GameOverScreen()
         {
@@ -114,11 +119,11 @@ namespace Mission1
             Console.WriteLine("======================================");
         }
 
-        static void Survivors(List<string> characterNames)
+        static void Survivors(List<string> CharacterNames)
         {
             Console.WriteLine("======================================");
             Console.WriteLine("Your party has survived. The remaining survivors are:");
-            foreach (string Name in characterNames) {
+            foreach (string Name in CharacterNames) {
                 Console.WriteLine(Name);
             }
             Console.WriteLine("======================================");
