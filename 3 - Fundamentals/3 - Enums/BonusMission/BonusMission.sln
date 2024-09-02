@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonusMission", "BonusMission.csproj", "{C8B3D82C-BC52-4FAC-9E21-B18C16231955}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8B3D82C-BC52-4FAC-9E21-B18C16231955}.Debug|x86.ActiveCfg = Debug|x86
+		{C8B3D82C-BC52-4FAC-9E21-B18C16231955}.Debug|x86.Build.0 = Debug|x86
+		{C8B3D82C-BC52-4FAC-9E21-B18C16231955}.Release|x86.ActiveCfg = Release|x86
+		{C8B3D82C-BC52-4FAC-9E21-B18C16231955}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+EndGlobal
