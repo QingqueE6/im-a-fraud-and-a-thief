@@ -18,9 +18,54 @@ class Program
         playerPosition = SpawnPlayer();
         
         StartGame();
+        PlayGame();
     }
         // =====================================================================================================================
 
+        static void PlayGame()
+        {
+            while (true)
+            {
+                var playerInput = Console.ReadKey(true);
+                if (playerInput.Key == ConsoleKey.Escape) break;
+                
+                switch (playerInput.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (levelMatrix[playerPosition.Item1 -1, playerPosition.Item2] == ' ')
+                        {
+                            levelMatrix[playerPosition.Item1, playerPosition.Item2] = ' ';
+                            playerPosition = new Tuple<int, int>(playerPosition.Item1 - 1, playerPosition.Item2); 
+                        }
+                        break;
+                    case ConsoleKey.DownArrow: 
+                        if (levelMatrix[playerPosition.Item1 + 1, playerPosition.Item2] == ' ')
+                        {
+                            levelMatrix[playerPosition.Item1, playerPosition.Item2] = ' ';
+                            playerPosition = new Tuple<int, int>(playerPosition.Item1 + 1, playerPosition.Item2); 
+                        }
+                        break;
+                    case ConsoleKey.LeftArrow: 
+                        if (levelMatrix[playerPosition.Item1, playerPosition.Item2 - 1] == ' ')
+                        {
+                            levelMatrix[playerPosition.Item1, playerPosition.Item2] = ' ';
+                            playerPosition = new Tuple<int, int>(playerPosition.Item1, playerPosition.Item2 - 1); 
+                        }
+                        break;
+                    case ConsoleKey.RightArrow: 
+                        if (levelMatrix[playerPosition.Item1, playerPosition.Item2 + 1] == ' ')
+                        {
+                            levelMatrix[playerPosition.Item1, playerPosition.Item2] = ' ';
+                            playerPosition = new Tuple<int, int>(playerPosition.Item1, playerPosition.Item2 + 1); 
+                            
+                        }
+                        break;
+                }
+                levelMatrix[playerPosition.Item1, playerPosition.Item2] = '\u263a';
+                PrintLevelWithColors();
+            }
+
+        }
         static void StartGame()
         {
             Console.WriteLine("Welcome to Mission Alpha Omega.");
@@ -90,6 +135,7 @@ class Program
 
         static void PrintLevelWithColors()
         {
+            Console.Clear();
             Console.SetCursorPosition(0,0);
             for (int y = 0; y < height; y++)
             {
