@@ -4,6 +4,7 @@ class Program
 {
     static int TotalRounds = 10;
     static int[][] JechtShotMark3 = new int[TotalRounds][];
+    static Random Randowiz = new Random();
     
     static void Main(string[] args)
     {
@@ -12,10 +13,8 @@ class Program
 
     static void PlayBowling()
     {
-        // Play first 9 games (normal)
-        // play last round (seperate method to avoid if)
-        // TODO: make last round method
         PlayNormal();
+        LastRound();
         Console.WriteLine("Bowling Results:");
         for (int i = 0; i < TotalRounds; i++)
         {
@@ -40,7 +39,7 @@ class Program
         Random Randowiz = new Random();
         int StandingPins = 10;
         
-        for (int i = 0; i < TotalRounds; i++)
+        for (int i = 0; i < TotalRounds - 1; i++)
         {
             int Shot1 = Randowiz.Next(0, StandingPins + 1);
             
@@ -58,5 +57,20 @@ class Program
             }
             
         }
+    }
+
+    static void LastRound()
+    {
+        int FinalShot1 = Randowiz.Next(0, TotalRounds);
+        
+        int FinalShot2 = (FinalShot1 == 10) 
+            ? Randowiz.Next(0, TotalRounds) 
+            : Randowiz.Next(0, TotalRounds - FinalShot1);
+        
+        int FinalShot3 = (FinalShot2 == 10) 
+            ? Randowiz.Next(0, TotalRounds) 
+            : Randowiz.Next(0, TotalRounds - FinalShot1);
+        
+        JechtShotMark3[9] = new int[3]{FinalShot1, FinalShot2, FinalShot3};
     }
 }
