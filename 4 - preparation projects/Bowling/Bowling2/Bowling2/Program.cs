@@ -5,6 +5,7 @@ class Program
     static int[][] JechtShotMark3 = new int[TotalRounds][];
     static int[] pointsGained = new int[TotalRounds];
     static int[] frameScores = new int[TotalRounds];
+    static string Username = System.Environment.MachineName;
     static Random Randowiz = new Random();
 
     static void Main(string[] args)
@@ -16,50 +17,81 @@ class Program
         PlayNormal();
         LastRound();
         CalculateFrameScores();
-        ShowResults();
+        // ShowResults();
+        ShowScoreBoard();
     }
     static void PlayNormal()
     {
         Random Randowiz = new Random();
-        int StandingPins = 10;
 
         for (int i = 0; i < TotalRounds - 1; i++)
         {
-            int Shot1 = Randowiz.Next(0, StandingPins + 1);
-
-            if (Shot1 <= 9)
+            int StandingPins = 10;
+            Console.WriteLine($"Round {i+1}: Press enter to roll, {Username}!");
+            
+            if (Console.ReadKey().Key == ConsoleKey.Enter)
             {
-                StandingPins -= Shot1;
-                int Shot2 = Randowiz.Next(0, StandingPins + 1);
+                int Shot1 = Randowiz.Next(0, StandingPins + 1);
 
-                JechtShotMark3[i] = new int[2] { Shot1, Shot2 };
-                pointsGained[i] = Shot1 + Shot2;
-                StandingPins = 10;
+                if (Shot1 <= 9)
+                {
+                    StandingPins -= Shot1;
+                    Console.WriteLine($"Round {i+1}: Roll again!");
+                    
+                    if (Console.ReadKey().Key == ConsoleKey.Enter)
+                    {
+                        int Shot2 = Randowiz.Next(0, StandingPins + 1);
+
+                        JechtShotMark3[i] = new int[2] { Shot1, Shot2 };
+                        pointsGained[i] = Shot1 + Shot2;
+                        PrintCurrentRound(Shot1, Shot2);
+                    }
+                }
+                else
+                {
+                        JechtShotMark3[i] = new int[1] { Shot1 };
+                        pointsGained[i] = Shot1;
+                        PrintCurrentRound(Shot1);
+                }
             }
-            else
-            {
-                JechtShotMark3[i] = new int[1] { Shot1 };
-                pointsGained[i] = Shot1;
-                StandingPins = 10;
-            }
+            
         }
     }
     static void LastRound()
     {
         int IndexLastRound = TotalRounds - 1;
-        int FinalShot1 = Randowiz.Next(0, TotalRounds);
-
-        int FinalShot2 = (FinalShot1 == 10)
-            ? Randowiz.Next(0, TotalRounds)
-            : Randowiz.Next(0, TotalRounds - FinalShot1);
-
-        int FinalShot3 = (FinalShot2 == 10)
-            ? Randowiz.Next(0, TotalRounds)
-            : Randowiz.Next(0, TotalRounds - FinalShot1);
-
+        int FinalShot1 = 0;
+        int FinalShot2 = 0;
+        int FinalShot3 = 0;
+        
+        Console.WriteLine($"Last round: Press enter to roll, {Username}!");
+        
+        if (Console.ReadKey().Key == ConsoleKey.Enter)
+        {
+            FinalShot1 = Randowiz.Next(0, TotalRounds);
+            Console.WriteLine($"You rolled {FinalShot1}!");
+        }
+        
+        Console.WriteLine($"Last round: Second roll!");
+        
+        if (Console.ReadKey().Key == ConsoleKey.Enter)
+        {
+            FinalShot2 = (FinalShot1 == 10)
+                ? Randowiz.Next(0, TotalRounds)
+                : Randowiz.Next(0, TotalRounds - FinalShot1);
+            Console.WriteLine($"You rolled {FinalShot1}!");
+        }
+        Console.WriteLine($"Last round: Last roll!");
+        
+        if (Console.ReadKey().Key == ConsoleKey.Enter)
+        {
+            FinalShot3 = (FinalShot2 == 10)
+                ? Randowiz.Next(0, TotalRounds)
+                : Randowiz.Next(0, TotalRounds - FinalShot1);
+            Console.WriteLine($"You rolled {FinalShot1}!");
+        }
         JechtShotMark3[IndexLastRound] = new int[3] { FinalShot1, FinalShot2, FinalShot3 };
         pointsGained[IndexLastRound] = FinalShot1 + FinalShot2 + FinalShot3;
-
     }
     static void CalculateFrameScores()
     {        
@@ -92,6 +124,55 @@ class Program
     static void SpareCalculation(int i)
     {
         pointsGained[i] += JechtShotMark3[i + 1][0];
+    }
+
+    static void PrintCurrentRound(int Throw1, int? Throw2 = null)
+    {
+        if (Throw1 == 10 ) Console.WriteLine($"Strike! That is 10 points.");
+        else if (Throw1 + (Throw2 ?? 0) == 10) Console.WriteLine($"Spare!: That is 10 points.");
+        else Console.WriteLine($"You rolled {Throw1} | {Throw2}");
+    }
+
+    static void ShowScoreBoard()
+    {
+        Console.WriteLine("┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐");
+        
+        for (int i = 0; i < TotalRounds; i++)
+        {
+            if (i < TotalRounds - 1) // Normal frames (1 to 9)
+            {
+                // Strike
+                if (JechtShotMark3[i].Length == 1)
+                {
+                    Console.Write("│ │X│ │");
+                }
+                // Spare
+                else if (JechtShotMark3[i].Length == 2 && JechtShotMark3[i][0] + JechtShotMark3[i][1] == 10)
+                {
+                    Console.Write($"│ │{JechtShotMark3[i][0]}│/│");
+                }
+                // Normal rolls
+                else
+                {
+                    Console.Write($"│ │{JechtShotMark3[i][0]}│{JechtShotMark3[i][1]}│");
+                }
+            }
+            else // 10th frame
+            {
+                string shot2 = (JechtShotMark3[i][1] == 10) ? "X" : (JechtShotMark3[i][0] + JechtShotMark3[i][1] == 10) ? "/" : JechtShotMark3[i][1].ToString();
+                string shot3 = (JechtShotMark3[i][2] == 10) ? "X" : JechtShotMark3[i][2].ToString();
+                Console.Write($"│ │{JechtShotMark3[i][0]}│{shot2}│{shot3}│");
+            }
+        }
+
+        Console.WriteLine("\n└─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤");
+        
+        for (int i = 0; i < TotalRounds; i++)
+        {
+            Console.Write($"│ {frameScores[i],4} ");
+        }
+        
+        Console.WriteLine("\n└─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴───────┘");
     }
 
     static void ShowResults()
