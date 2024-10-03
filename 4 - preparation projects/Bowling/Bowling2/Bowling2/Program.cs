@@ -18,7 +18,7 @@ class Program
         LastRound();
         CalculateFrameScores();
         // ShowResults();
-        ShowScoreBoard();
+        // ShowScoreBoard();
     }
     static void PlayNormal()
     {
@@ -54,7 +54,6 @@ class Program
                         PrintCurrentRound(Shot1);
                 }
             }
-            
         }
     }
     static void LastRound()
@@ -136,6 +135,7 @@ class Program
     static void ShowScoreBoard()
     {
         Console.WriteLine("┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐");
+        Console.Write("│");
         
         for (int i = 0; i < TotalRounds; i++)
         {
@@ -144,34 +144,34 @@ class Program
                 // Strike
                 if (JechtShotMark3[i].Length == 1)
                 {
-                    Console.Write("│ │X│ │");
+                    Console.Write(" │X│ │");
                 }
                 // Spare
                 else if (JechtShotMark3[i].Length == 2 && JechtShotMark3[i][0] + JechtShotMark3[i][1] == 10)
                 {
-                    Console.Write($"│ │{JechtShotMark3[i][0]}│/│");
+                    Console.Write($" │{JechtShotMark3[i][0]}│/│");
                 }
                 // Normal rolls
                 else
                 {
-                    Console.Write($"│ │{JechtShotMark3[i][0]}│{JechtShotMark3[i][1]}│");
+                    Console.Write($" │{JechtShotMark3[i][0]}│{JechtShotMark3[i][1]}│");
                 }
             }
             else // 10th frame
             {
                 string shot2 = (JechtShotMark3[i][1] == 10) ? "X" : (JechtShotMark3[i][0] + JechtShotMark3[i][1] == 10) ? "/" : JechtShotMark3[i][1].ToString();
                 string shot3 = (JechtShotMark3[i][2] == 10) ? "X" : JechtShotMark3[i][2].ToString();
-                Console.Write($"│ │{JechtShotMark3[i][0]}│{shot2}│{shot3}│");
+                Console.Write($" │{JechtShotMark3[i][0]}│{shot2}│{shot3}│");
             }
         }
 
         Console.WriteLine("\n└─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤");
-        
-        for (int i = 0; i < TotalRounds; i++)
+        Console.Write("│");
+        for (int i = 0; i < TotalRounds - 1; i++)
         {
-            Console.Write($"│ {frameScores[i],4} ");
+            Console.Write($" {frameScores[i],4}│");
         }
-        
+        Console.Write($" {frameScores[9],6}│");
         Console.WriteLine("\n└─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴───────┘");
     }
 
