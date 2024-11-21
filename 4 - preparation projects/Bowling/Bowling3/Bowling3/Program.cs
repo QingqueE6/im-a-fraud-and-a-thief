@@ -136,8 +136,6 @@
                 calculationPending[i] = false;
             }
         }
-
-
         static void ShowScoreBoard(int currentRound)
         {
             CalculateFrameScores(currentRound);
@@ -171,6 +169,28 @@
                 else{Console.Write($" {frameScores[i],4}│");}
             }
             Console.WriteLine("\n└─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴───────┘");
+            ShowPins(currentRound);
+        }
+
+        static void ShowPins(int i)
+        {
+            int remainingPins = TotalRounds - pointsGained[i];
+            string[] Pin = new string[TotalRounds];
+
+            for (int j = 0; j < remainingPins; j++) Pin[j] = "o";
+            
+            string CenterLine(string line, int width)
+            {
+                int padding = (width - line.Length) / 2;
+                return line.PadLeft(padding + line.Length).PadRight(width);
+            }
+            
+            int width = 7;
+
+            Console.WriteLine(CenterLine($"{Pin[6]} {Pin[7]} {Pin[8]} {Pin[9]}", width));
+            Console.WriteLine(CenterLine($"{Pin[3]} {Pin[4]} {Pin[5]}", width));
+            Console.WriteLine(CenterLine($"{Pin[1]} {Pin[2]}", width));
+            Console.WriteLine(CenterLine($"{Pin[0]}", width));
         }
     }
 }
