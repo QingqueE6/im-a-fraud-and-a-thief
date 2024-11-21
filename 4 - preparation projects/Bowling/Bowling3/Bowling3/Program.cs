@@ -6,6 +6,7 @@
         static int[][] JechtShotMark3 = new int[TotalRounds][];
         static int[] pointsGained = new int[TotalRounds];
         static int[] frameScores = new int[TotalRounds];
+        static bool[] calculationPending = new bool[TotalRounds];
         static string Username = System.Environment.MachineName;
         static Random Randowiz = new Random();
         private int carryOver = 0;
@@ -42,12 +43,14 @@
                             int Shot2 = Randowiz.Next(0, StandingPins + 1);
                             JechtShotMark3[i] = new int[2] { Shot1, Shot2 };
                             pointsGained[i] = Shot1 + Shot2;
+                            if (Shot1 + Shot2 == 10) calculationPending[i] = true;
                         }
                     }
                     else
                     {
                         JechtShotMark3[i] = new int[1] { Shot1 };
                         pointsGained[i] = Shot1;
+                        calculationPending[i] = true;
                     }
                     frameScores[i] += pointsGained[i];
                 }
@@ -91,17 +94,54 @@
             }
             JechtShotMark3[IndexLastRound] = new int[3] { FinalShot1, FinalShot2, FinalShot3 };
             pointsGained[IndexLastRound] = FinalShot1 + FinalShot2 + FinalShot3;
+            frameScores[IndexLastRound] = pointsGained[IndexLastRound];
             ShowScoreBoard(9);
         }
 
         static void CalculateFrameScores(int currentRound)
         {
+            for (int i = 0; i <= currentRound; i++)
+            {
+                if (calculationPending[i] && JechtShotMark3[i].Length == 2)
+                {
+                    SpareCalculation(i);
+                }
+                else if (calculationPending[i] && JechtShotMark3[i].Length == 1)
+                {
+                    StrikeCalculation(i);
+                }
+            }
+        }
 
+        static void StrikeCalculation(int i)
+        {
+            if (JechtShotMark3[i + 1] != null && JechtShotMark3[i + 1].Length == 2)
+            {
+                frameScores[i] += JechtShotMark3[i + 1][0];
+                frameScores[i] += JechtShotMark3[i + 1][1];
+                calculationPending[i] = false;
+            }
+            else if (JechtShotMark3[i + 2] != null && JechtShotMark3[i + 1].Length == 1 && JechtShotMark3[i + 2].Length >= 1)
+            {
+                frameScores[i] += JechtShotMark3[i + 1][0];
+                frameScores[i] += JechtShotMark3[i + 2][0];
+                calculationPending[i] = false;
+            }
+        }
+        static void SpareCalculation(int i)
+        {
+            if (JechtShotMark3[i + 1] != null && JechtShotMark3[i + 1].Length >= 1)
+            {
+                frameScores[i] += JechtShotMark3[i + 1][0];
+                calculationPending[i] = false;
+            }
         }
 
 
         static void ShowScoreBoard(int currentRound)
         {
+            CalculateFrameScores(currentRound);
+            
             Console.WriteLine("┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐");
             Console.Write("│");
 
@@ -124,11 +164,10 @@
             }
 
             Console.WriteLine("\n└─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤");
-            CalculateFrameScores(currentRound);
             Console.Write("│");
             for (int i = 0; i <= currentRound; i++)
             {
-                if(i == 9){ Console.Write($" {frameScores[i],6}│");}
+                if(i == 9) Console.Write($" {frameScores[i],6}│");
                 else{Console.Write($" {frameScores[i],4}│");}
             }
             Console.WriteLine("\n└─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴───────┘");
