@@ -141,12 +141,13 @@
         {
             Console.Clear();
             CalculateFrameScores(currentRound);
-            
+            WithSpace(currentRound * 6, $"FRAME {currentRound + 1}");
             Console.WriteLine("┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐");
             Console.Write("│");
-
+            
             for (int i = 0; i <= currentRound; i++)
             {
+
                 if (JechtShotMark3[i] == null)
                 {
                     Console.Write($" │{currentShot}│ │");
@@ -197,6 +198,12 @@
             Console.WriteLine(CenterLine($"{Pin[3]} {Pin[4]} {Pin[5]}", width));
             Console.WriteLine(CenterLine($"{Pin[1]} {Pin[2]}", width));
             Console.WriteLine(CenterLine($"{Pin[0]}", width));
+        }
+        
+        static void WithSpace(int spacesCount, string content)
+        {
+            string spaces = new string(' ', spacesCount);
+            Console.WriteLine($"{spaces}{content}");
         }
     }
 }
