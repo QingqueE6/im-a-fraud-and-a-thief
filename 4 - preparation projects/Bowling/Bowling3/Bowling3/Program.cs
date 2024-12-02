@@ -36,6 +36,7 @@
                     if (Shot1 < StandingPins)
                     {
                         StandingPins -= Shot1;
+                        ShowScoreBoard(i, Shot1);
                         Console.WriteLine($"Round {i + 1}: Roll again!");
 
                         if (Console.ReadKey().Key == ConsoleKey.Enter)
@@ -136,8 +137,9 @@
                 calculationPending[i] = false;
             }
         }
-        static void ShowScoreBoard(int currentRound)
+        static void ShowScoreBoard(int currentRound, int? currentShot = null)
         {
+            Console.Clear();
             CalculateFrameScores(currentRound);
             
             Console.WriteLine("┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐");
@@ -145,9 +147,13 @@
 
             for (int i = 0; i <= currentRound; i++)
             {
-                if (i < TotalRounds - 1) // Normal frames (1 to 9)
+                if (JechtShotMark3[i] == null)
                 {
-                    if (JechtShotMark3[i].Length == 1) Console.Write(" │X│ │"); // Strike
+                    Console.Write($" │{currentShot}│ │");
+                }
+                else if (i < TotalRounds - 1) // Normal frames (1 to 9)
+                {
+                    if (JechtShotMark3[i][0] == 10) Console.Write(" │X│ │"); // Strike
                     else if (JechtShotMark3[i].Length == 2 && JechtShotMark3[i][0] + JechtShotMark3[i][1] == 10)
                         Console.Write($" │{JechtShotMark3[i][0]}│/│"); // Spare
                     else Console.Write($" │{JechtShotMark3[i][0]}│{JechtShotMark3[i][1]}│"); // Normal rolls
